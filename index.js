@@ -44,22 +44,23 @@ class ProductManager {
     }
     async updateProduct(id, productUpdate) {
         const products = await this.getProducts()
-        const productFind = products.findIndex(product => product.id === id) 
+        const productFind = products.findIndex(product => product.id === id)
         if (productFind === -1) return console.log('No se encuentra el producto.')
-        products[productFind] = { ...products[productFind], ...productUpdate, id } 
+        products[productFind] = { ...products[productFind], ...productUpdate, id }
         await fs.promises.writeFile(this.path, JSON.stringify(products))
         console.log('Producto actualizado correctamente.')
     }
 
     async deleteProduct(id) {
         const products = await this.getProducts()
-        if (!products.some(product => product.id === id)) return console.log('El producto que quiere borrar no existe.') 
-        const productsFiltered = products.filter(product => product.id !== id) 
-        await fs.promises.writeFile(this.path, JSON.stringify(productsFiltered))
+        if (!products.some(product => product.id === id)) return console.log('El producto que quiere borrar no existe.')
+        const productsDelete = products.splice(products, 1);
+        await fs.promises.writeFile(this.path, JSON.stringify(productsDelete))
         console.log('Producto eliminado.')
     }
 
 }
+exports.productsManager = ProductManager;
 
 async function test() {
 
@@ -68,11 +69,11 @@ async function test() {
     console.log(await instance.getProducts()) // []
 
     await instance.addProduct({
-        title: "producto prueba",
+        title: "producto prueba 2",
         description: "Este es un producto prueba",
         price: 200,
         thumbnail: "Sin img",
-        code: "abc123",
+        code: "abc1234",
         stock: 25
     }) // El Producto "producto prueba" fue agregado exitosamente.
 
@@ -80,12 +81,12 @@ async function test() {
 
     console.log('El producto con id 1 es:', await instance.getProductById(1)) // Muestra el producto con id = 1.
 
-    console.log(await instance.getProductById(1)) // Producto no encontrado.
+    console.log(await instance.getProductById(2)) // Producto no encontrado.
 
     await instance.updateProduct(
         1,
         {
-            stock: 200
+            stock: 300
         }
     ) // Producto actualizado correctamente.
 
