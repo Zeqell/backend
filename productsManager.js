@@ -61,38 +61,3 @@ class ProductManager {
 
 }
 exports.productsManager = ProductManager;
-
-async function test() {
-
-    const instance = new ProductManager('./products.json')
-
-    console.log(await instance.getProducts()) // []
-
-    await instance.addProduct({
-        title: "producto prueba 2",
-        description: "Este es un producto prueba",
-        price: 200,
-        thumbnail: "Sin img",
-        code: "abc1234",
-        stock: 25
-    }) // El Producto "producto prueba" fue agregado exitosamente.
-
-    console.log('Producto recién agregado:', await instance.getProducts()) // Muestra el producto recién agregado.
-
-    console.log('El producto con id 1 es:', await instance.getProductById(1)) // Muestra el producto con id = 1.
-
-    console.log(await instance.getProductById(2)) // Producto no encontrado.
-
-    await instance.updateProduct(
-        1,
-        {
-            stock: 300
-        }
-    ) // Producto actualizado correctamente.
-
-    await instance.deleteProduct(1) // Producto eliminado.
-
-    await instance.deleteProduct(150) // El producto a eliminar no existe.
-}
-
-test();
